@@ -8,28 +8,39 @@ strip = 'arm-none-eabi-strip'
 
 [properties]
 c_args = [
-    '-mcpu=cortex-m7',
-    '-mthumb',
-    '-mfpu=fpv5-d16',
-    '-mfloat-abi=hard',
-    '-Wall',
+    '-mcpu=cortex-m0',
+    '-std=gnu11',
+    # '-I../Core/Inc',
+    # '-I../Drivers/STM32F0xx_HAL_Driver/Inc',
+    # '-I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy',
+    # '-I../Drivers/CMSIS/Device/ST/STM32F0xx/Include',
+    # '-I../Drivers/CMSIS/Include',
+    '-Os',
     '-ffunction-sections',
     '-fdata-sections',
+    '-Wall',
+    '-fstack-usage',
+    '-fcyclomatic-complexity',
+    '--specs=nano.specs',
+    '-mfloat-abi=soft',
+    '-mthumb',
     ]
 
 c_link_args = [
-    '-mcpu=cortex-m7',
+    '-mcpu=cortex-m0',
+    '--specs=nosys.specs',
+    '-static',
+    '--specs=nano.specs',
+    '-mfloat-abi=soft',
     '-mthumb',
-    '-mfpu=fpv5-d16',
-    '-mfloat-abi=hard',
-    '-specs=nano.specs',
+    '-Wl,--start-group',
     '-lc',
     '-lm',
-    '-lnosys',
+    '-Wl,--end-group',
     ]
 
 [host_machine]
 system = 'bare-metel'
 cpu_family = 'arm'
-cpu = 'cortex-m7'
+cpu = 'cortex-m0'
 endian = 'little'

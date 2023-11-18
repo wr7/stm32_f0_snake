@@ -1,0 +1,15 @@
+project_src += [
+	'Src/stm32f0xx_hal.c',
+	'Src/stm32f0xx_hal_cortex.c',
+	'Src/stm32f0xx_hal_dma.c',
+	'Src/stm32f0xx_hal_exti.c',
+	'Src/stm32f0xx_hal_flash.c',
+	'Src/stm32f0xx_hal_flash_ex.c',
+	'Src/stm32f0xx_hal_gpio.c',
+	'Src/stm32f0xx_hal_i2c.c',
+	'Src/stm32f0xx_hal_i2c_ex.c',
+	'Src/stm32f0xx_hal_pwr.c',
+	'Src/stm32f0xx_hal_pwr_ex.c',
+	'Src/stm32f0xx_hal_rcc.c',
+	'Src/stm32f0xx_hal_rcc_ex.c',
+]

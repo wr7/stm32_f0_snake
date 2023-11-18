@@ -2,7 +2,7 @@
 project('stmh7', 'c', 'cpp',
   version : '1.0',
   default_options : [
-    'b_lto=false',
+    'b_lto=true',
     #'b_asneeded=false',
     #'b_lundef=false',
     'b_pch=false',
@@ -37,11 +37,11 @@ endif
 # microcontroller specific settings
 defines = [
   '-DUSE_HAL_DRIVER',
-  '-DSTM32H743xx',
+  '-DSTM32F070xB',
 ]
 
-linkerfile = files('src/STM32H743ZITx_FLASH.ld')
-startupfile = files('src/startup_stm32h743xx.s')
+linkerfile = files('src/STM32F070CBTX_FLASH.ld')
+startupfile = files('src/startup_stm32f070cbtx.s')
 
 # add defines to the c_args
 c_args += defines
@@ -49,16 +49,6 @@ c_args += defines
 
 # add the linker script to flags
 c_link_args += '-Wl,-T@0@/@1@'.format(meson.current_source_dir(), linkerfile[0])
-
-# include doxygen generation if enabled
-if get_option('enable_docs')
-  subdir('docs')
-endif
-
-# include tests if enabled
-if get_option('enable_test')
-  subdir('test')
-endif
 
 # include the source files of the project
 subdir('src')
