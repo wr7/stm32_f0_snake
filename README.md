@@ -1,3 +1,7 @@
+A fork of [FlyingBBQ/meson_embedded](https://github.com/FlyingBBQ/meson_embedded) modified for the STM32f0
+
+*note: This fork has docker, vagrant, doxygen, and windows support removed*
+
 # Build system for Embedded projects
 
 This project offers a complete build environment using [Meson](https://mesonbuild.com/index.html), specifically for C/C++ projects in embedded systems.
