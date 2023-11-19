@@ -1,9 +1,16 @@
 #include "main.h"
+#include "gpio.h"
+#include "constants.h"
+
+#include "stm32f070xb.h"
 
 void SystemClock_Config(void);
 
 int main(void)
 {
+  enable_led_pin();
+
+  GPIOA->BSRR |= 1 << LED_PIN;
 
   while (1)
   {
