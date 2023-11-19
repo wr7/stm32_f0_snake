@@ -1,11 +1,8 @@
-#!/bin/bash
-
-srcdir=.
-buildir=build
-
-if [ -d "$buildir" ]; then
-    echo "removing directory: $buildir"
-    rm -r $buildir
+#!/bin/sh
+echo "Configuring with meson:"
+if ./build-meson.sh; then
+  echo "Running ninja: "
+  cd build
+  ninja
+  cd ..
 fi
-
-meson $srcdir $buildir --cross-file config/cross_linux.txt --buildtype=minsize && cd $buildir
