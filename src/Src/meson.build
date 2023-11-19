@@ -1,8 +1,8 @@
 project_src += [
-  'main.c',
-  'stm32f0xx_hal_msp.c',
-  'stm32f0xx_it.c',
-  'syscalls.c',
-  'sysmem.c',
-  'system_stm32f0xx.c',
+  'src/Src/main.c',
+  'src/Src/stm32f0xx_hal_msp.c',
+  'src/Src/stm32f0xx_it.c',
+  'src/Src/syscalls.c',
+  'src/Src/sysmem.c',
+  'src/Src/system_stm32f0xx.c',
 ]

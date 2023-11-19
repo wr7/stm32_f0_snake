@@ -10,17 +10,12 @@ strip = 'arm-none-eabi-strip'
 c_args = [
     '-mcpu=cortex-m0',
     '-std=gnu11',
-    # '-I../Core/Inc',
-    # '-I../Drivers/STM32F0xx_HAL_Driver/Inc',
-    # '-I../Drivers/STM32F0xx_HAL_Driver/Inc/Legacy',
-    # '-I../Drivers/CMSIS/Device/ST/STM32F0xx/Include',
-    # '-I../Drivers/CMSIS/Include',
     '-Os',
     '-ffunction-sections',
     '-fdata-sections',
     '-Wall',
     '-fstack-usage',
-    '-fcyclomatic-complexity',
+    '--specs=nosys.specs',
     '--specs=nano.specs',
     '-mfloat-abi=soft',
     '-mthumb',
@@ -29,14 +24,12 @@ c_args = [
 c_link_args = [
     '-mcpu=cortex-m0',
     '--specs=nosys.specs',
-    '-static',
     '--specs=nano.specs',
     '-mfloat-abi=soft',
     '-mthumb',
-    '-Wl,--start-group',
-    '-lc',
+    '-lc_nano',
     '-lm',
-    '-Wl,--end-group',
+    '-lnosys',
     ]
 
 [host_machine]
