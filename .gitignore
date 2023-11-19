@@ -1,6 +1,7 @@
 build/
 config/platform/build/
 config/*.log
+.cache/
 
 .vagrant
 
