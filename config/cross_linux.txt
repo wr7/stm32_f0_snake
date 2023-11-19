@@ -1,0 +1,39 @@
+[binaries]
+c = 'arm-none-eabi-gcc'
+cpp = 'arm-none-eabi-g++'
+ld = 'arm-none-eabi-ld'
+ar = 'arm-none-eabi-ar'
+as = 'arm-none-eabi-as'
+strip = 'arm-none-eabi-strip'
+
+[properties]
+c_args = [
+    '-mcpu=cortex-m0',
+    '-std=gnu11',
+    '-Os',
+    '-ffunction-sections',
+    '-fdata-sections',
+    '-Wall',
+    '-fstack-usage',
+    '--specs=nosys.specs',
+    '--specs=nano.specs',
+    '-mfloat-abi=soft',
+    '-mthumb',
+    ]
+
+c_link_args = [
+    '-mcpu=cortex-m0',
+    '--specs=nosys.specs',
+    '--specs=nano.specs',
+    '-mfloat-abi=soft',
+    '-mthumb',
+    '-lc_nano',
+    '-lm',
+    '-lnosys',
+    ]
+
+[host_machine]
+system = 'bare-metel'
+cpu_family = 'arm'
+cpu = 'cortex-m0'
+endian = 'little'
