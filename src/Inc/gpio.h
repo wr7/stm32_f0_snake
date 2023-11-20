@@ -32,4 +32,4 @@ typedef enum PinMode {
 } PinMode;
 
 void enable_gpio_port(GpioPort port);
-void enable_led_pin();
+void initialize_led_pin();

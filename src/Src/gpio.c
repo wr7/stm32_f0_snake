@@ -5,7 +5,7 @@ void enable_gpio_port(GpioPort port) {
   RCC->AHBENR |= 1 << (17 + port);
 }
 
-void enable_led_pin() {
+void initialize_led_pin() {
   enable_gpio_port(GPIO_PORT_A);
 
   GPIOA->PUPDR |= RESISTOR_TYPE_NONE << (LED_PIN * 2);

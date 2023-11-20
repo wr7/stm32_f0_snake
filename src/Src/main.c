@@ -6,7 +6,7 @@
 
 int main(void)
 {
-  enable_led_pin();
+  initialize_led_pin();
 
   GPIOA->BSRR |= 1 << LED_PIN;
 
