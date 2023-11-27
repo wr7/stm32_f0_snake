@@ -1,4 +1,8 @@
-#ifndef __MAIN_H
-#define __MAIN_H
+#pragma once
 
-#endif /* __MAIN_H */
+typedef enum {
+  DIRECTION_UP = 1,
+  DIRECTION_DOWN = 2,
+  DIRECTION_LEFT = 3,
+  DIRECTION_RIGHT = 4,
+} Direction;
