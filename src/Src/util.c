@@ -15,9 +15,9 @@ Position position_adjacent_to(Position origin, Direction direction) {
     case DIRECTION_RIGHT: adjacent_position.x += 1; break;
   }
 
-  if(origin.x >= 64 || origin.y >= 32) { // Set x and y to sentinel values
-    origin.x = 255;
-    origin.y = 255;
+  if(adjacent_position.x >= 64 || adjacent_position.y >= 32) { // Set x and y to sentinel values
+    adjacent_position.x = 255;
+    adjacent_position.y = 255;
   }
 
   return adjacent_position;

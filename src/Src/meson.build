@@ -4,6 +4,7 @@ project_src += [
   'src/Src/i2c.c',
   'src/Src/keyboard.c',
   'src/Src/main.c',
+  'src/Src/psuedorandom.c',
   'src/Src/screen.c',
   'src/Src/snake_state.c',
   'src/Src/syscalls.c',

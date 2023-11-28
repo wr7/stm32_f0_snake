@@ -2,8 +2,22 @@
 #include "prelude.h"
 #include "util.h"
 #include "screen.h"
+#include "psuedorandom.h"
 
-volatile Position FOOEY;
+static void respawn_fruit(SnakeState *self) {
+  while(true) {
+    u8 new_x = prng_next_byte(&self->random_number_generator) % 64;
+    u8 new_y = prng_next_byte(&self->random_number_generator) % 32;
+
+    self->fruit_position = (Position){new_x, new_y};
+
+    if(!screen_get_pixel(self->screen, self->fruit_position)) {
+      break;
+    }
+  }
+
+  screen_set_pixel(self->screen, self->fruit_position);
+}
 
 // Updates the game state and screen buffer
 void snake_state_tick(SnakeState *self, Button input) {
@@ -11,11 +25,7 @@ void snake_state_tick(SnakeState *self, Button input) {
     self->snake_direction = (Direction) input;
   }
 
-  Position old_tail = position_ring_buffer_pop_front(&self->snake_position);
-  screen_reset_pixel(self->screen, old_tail);
-
   Position old_head = *position_ring_buffer_get(self->snake_position, self->snake_position.length - 1);
-
   Position new_head = position_adjacent_to(old_head, self->snake_direction);
 
   if(new_head.x == 255) {
@@ -23,11 +33,26 @@ void snake_state_tick(SnakeState *self, Button input) {
     return;
   }
 
+  if(screen_get_pixel(self->screen, new_head)) {
+    if(new_head.x == self->fruit_position.x && new_head.y == self->fruit_position.y) {
+      respawn_fruit(self);
+    } else {
+      // We just hit another snake segment
+      snake_state_initialize(self); // Reset the game
+      return;
+    }
+  } else {
+    // We did not hit a fruit, so remove the end tail segment
+    Position old_tail = position_ring_buffer_pop_front(&self->snake_position);
+    screen_reset_pixel(self->screen, old_tail);
+  }
+
   position_ring_buffer_push(&self->snake_position, new_head);
   screen_set_pixel(self->screen, new_head);
 }
 
 void snake_state_initialize(SnakeState *self) {
+  self->random_number_generator = prng_with_default_seed();
   self->snake_position = position_ring_buffer_new(self->snake_position_buffer, ARRAY_LENGTH(self->snake_position_buffer));
   self->snake_direction = DIRECTION_RIGHT;
 
@@ -46,4 +71,6 @@ void snake_state_initialize(SnakeState *self) {
 
     screen_set_pixel(self->screen, snake_segment);
   }
+
+  respawn_fruit(self);
 }

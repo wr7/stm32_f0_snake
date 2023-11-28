@@ -3,12 +3,15 @@
 #include "util.h"
 #include "prelude.h"
 #include "keyboard.h"
+#include "psuedorandom.h"
 
 typedef struct {
+  PRNG random_number_generator;
   u8 screen[64 * 4];
 
   PositionRingBuffer snake_position;
   Direction snake_direction;
+  Position fruit_position;
 
   Position snake_position_buffer[32 * 64];
 } SnakeState;
