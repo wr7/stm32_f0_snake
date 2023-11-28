@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "keyboard.h"
 
+#include "snake_state.h"
 #include "stm32f070xb.h"
 
 // size = 156
@@ -34,32 +35,16 @@ int main(void)
     // Enable LED pin
     GPIOA->BSRR |= 1 << LED_PIN;
 
-  u8 screen[64 * 4] = {0};
-  
-  screen[12]=0xaa;
+  SnakeState state;
+  snake_state_initialize(&state);
 
   while(true)
   {
     Button button = get_button();
-    screen[0] = 0;
-    screen[4] = 0;
-    screen[8] = 0;
+    
+    snake_state_tick(&state, button);
 
-    switch (button) {
-    case BUTTON_NONE:
-      // screen[4] = 2; break;
-      break;
-    case BUTTON_UP:
-      screen[4] = 1; break;
-    case BUTTON_DOWN:
-      screen[4] = 4; break;
-    case BUTTON_LEFT:
-      screen[0] = 2; break;
-    case BUTTON_RIGHT:
-      screen[8] = 2; break;
-    }
-
-    update_screen(screen);
+    update_screen(state.screen);
   }
 }
 

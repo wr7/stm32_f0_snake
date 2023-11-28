@@ -2,6 +2,11 @@
 #include <stdbool.h>
 
 #include "prelude.h"
+#include "util.h"
+
+void screen_set_pixel(u8 screen_buffer[64 * 4], Position position);
+bool screen_get_pixel(u8 screen_buffer[64 *4], Position position);
+void screen_reset_pixel(u8 screen_buffer[64 * 4], Position position);
 
 bool initialize_screen();
 

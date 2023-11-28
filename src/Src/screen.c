@@ -2,8 +2,30 @@
 #include "constants.h"
 #include "i2c.h"
 #include "prelude.h"
+#include "util.h"
 
 #include <stdbool.h>
+
+void screen_set_pixel(u8 screen_buffer[64 * 4], Position position) {
+  u8 page = position.y / 8;
+  u8 bit_offset = position.y % 8;
+
+  screen_buffer[position.x * 4 + page] |= 1 << bit_offset;
+}
+
+bool screen_get_pixel(u8 screen_buffer[64 *4], Position position) {
+  u8 page = position.y / 8;
+  u8 bit_offset = position.y % 8;
+
+  return (screen_buffer[position.x * 4 + page] & (1 << bit_offset)) != 0;
+}
+
+void screen_reset_pixel(u8 screen_buffer[64 * 4], Position position) {
+  u8 page = position.y / 8;
+  u8 bit_offset = position.y % 8;
+
+  screen_buffer[position.x * 4 + page] &= ~(1 << bit_offset);
+}
 
 bool initialize_screen() {
   // initialize_i2c2();

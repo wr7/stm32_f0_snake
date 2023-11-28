@@ -5,5 +5,7 @@ project_src += [
   'src/Src/keyboard.c',
   'src/Src/main.c',
   'src/Src/screen.c',
+  'src/Src/snake_state.c',
   'src/Src/syscalls.c',
+  'src/Src/util.c',
 ]

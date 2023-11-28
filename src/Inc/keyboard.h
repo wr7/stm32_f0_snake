@@ -1,4 +1,6 @@
-#include "main.h"
+#pragma once
+
+#include "util.h"
 
 typedef enum {
   BUTTON_NONE = 0,
