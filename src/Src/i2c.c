@@ -31,16 +31,17 @@ void initialize_i2c2() {
   RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
 
   ////// TIMING PARAMETERS //////
-  //// I2C Speed: 10 kHz
-  //// Speed Mode: Standard
-  //// Fall/Rise Time: 0
+  // (as described in the STM32F030x4/6/8/C reference manual) //
 
-  const u32 I2C_PARAMETERS = 0x20887F7F;
-  I2C2->TIMINGR = I2C_PARAMETERS;
+  const u32 PRESC = 0x1; // (nibble)
+  const u32 SCLDEL = 0x2; // (nibble)
+  const u32 SDADEL = 0x2; // (nibble)
+  const u32 SCLH = 0x0F; // (byte)
+  const u32 SCLL = 0x0F; // (byte)
+
+  I2C2->TIMINGR = (PRESC << 28) | (SCLDEL << 20) | (SDADEL << 16) | (SCLH << 8) | SCLL;
 
   // Enable I2C2 //
-  // TODO: try one CR1 write
-  I2C2->CR1 = I2C_CR1_ANFOFF;
   I2C2->CR1 = I2C_CR1_PE | I2C_CR1_ANFOFF;
 }
 
@@ -50,16 +51,13 @@ void initialize_i2c2() {
 /// NOTE: i2c_transmit_byte must be called atleast once
 /// before `i2c_end_frame`.
 void i2c_start_frame(u8 address) {
-  u32 new_cr2 = 
+  I2C2->ICR = I2C_ICR_NACKCF;
+
+  I2C2->CR2 = 
     ((u32) address) << 1U |
     I2C_CR2_RELOAD | 
-    1U << I2C_CR2_NBYTES_Pos;
-
-  I2C2->CR2 = new_cr2;
-
-  I2C2->ICR = I2C_ICR_NACKCF;
-  // TODO: try one CR2 write
-  I2C2->CR2 = new_cr2 | I2C_CR2_START;
+    1U << I2C_CR2_NBYTES_Pos |
+    I2C_CR2_START;
 }
 
 bool i2c_transmit_byte(u8 byte) {
@@ -71,9 +69,7 @@ bool i2c_transmit_byte(u8 byte) {
       return false;
     } else if((isr & I2C_ISR_TXIS_Msk) != 0) {
       I2C2->TXDR = byte;
-      // TODO: try resetting TXIS mask. Maybe this fixes the hardware bug????
       break;
-      // Another fix `!=` -> `==`
     } else if((isr & I2C_ISR_BUSY_Msk) == 0) {
       return false;
     }
@@ -103,7 +99,7 @@ void i2c_end_frame() {
 
   // If we try to send another I2C frame too soon,
   // SCL will be pulled low until the MCU is reset
-  for(u32 i = 0; i < 500; i++) {
+  for(u32 i = 0; i < 20; i++) {
     __ASM volatile ("nop");
   }
 }
