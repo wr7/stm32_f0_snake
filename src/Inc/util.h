@@ -26,6 +26,8 @@ typedef enum {
   DIRECTION_RIGHT = 4,
 } Direction;
 
+bool direction_is_opposite_of(Direction self, Direction other);
+
 typedef struct {
   u8 x;
   u8 y;

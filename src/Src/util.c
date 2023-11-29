@@ -3,6 +3,17 @@
 
 GENERATE_RING_BUFFER_SOURCE(Position, PositionRingBuffer, position_ring_buffer)
 
+bool direction_is_opposite_of(Direction self, Direction other) {
+  switch(self) {
+    case DIRECTION_UP: return other == DIRECTION_DOWN;
+    case DIRECTION_DOWN: return other == DIRECTION_UP;
+    case DIRECTION_LEFT: return other == DIRECTION_RIGHT;
+    case DIRECTION_RIGHT: return other == DIRECTION_LEFT;
+  }
+
+  __builtin_unreachable();
+}
+
 // Gets a position adjacent to `origin` in the direction `direction`
 // or returns (255, 255) if the position is offscreen.
 Position position_adjacent_to(Position origin, Direction direction) {

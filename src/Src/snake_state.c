@@ -21,7 +21,11 @@ static void respawn_fruit(SnakeState *self) {
 // Updates the game state and screen buffer
 void snake_state_tick(SnakeState *self, Button input) {
   if(input != BUTTON_NONE) {
-    self->snake_direction = (Direction) input;
+    Direction new_direction = (Direction) input;
+
+    if(!direction_is_opposite_of(self->snake_direction, new_direction)) {
+      self->snake_direction = new_direction;
+    }
   }
 
   Position old_head = *position_ring_buffer_get(self->snake_position, self->snake_position.length - 1);
