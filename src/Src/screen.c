@@ -1,7 +1,6 @@
 #include "screen.h"
 #include "constants.h"
 #include "i2c.h"
-#include "prelude.h"
 #include "util.h"
 
 #include <stdbool.h>
@@ -27,8 +26,13 @@ void screen_reset_pixel(u8 screen_buffer[64 * 4], Position position) {
   screen_buffer[position.x * 4 + page] &= ~(1 << bit_offset);
 }
 
-bool initialize_screen() {
-  // initialize_i2c2();
+bool screen_initialize() {
+  i2c2_initialize();
+
+  // Wait for screen to turn on
+  for(u32 i = 0; i < 500000; i++) {
+    __ASM volatile ("nop");
+  }
 
   bool ok = true;
 
@@ -47,13 +51,13 @@ bool initialize_screen() {
     0xaf, // turn on display
   };
 
-  i2c_start_frame(SCREEN_ADDRESS);
+  i2c2_start_frame(SCREEN_ADDRESS);
 
   for(u32 i = 0; i < ARRAY_LENGTH(INIT_PACKET); i++) {
-    ok = ok && i2c_transmit_byte(INIT_PACKET[i]);
+    ok = ok && i2c2_transmit_byte(INIT_PACKET[i]);
   }
 
-  i2c_end_frame();
+  i2c2_end_frame();
 
   return ok;
 }
@@ -71,7 +75,7 @@ const static u8 NIBBLE_UPSCALE_LUT[] = {
 // 
 // The screen buffer should be layed out such that a pixel's value can be read with
 // `screen_buffer[column * 4 + row/8] & (row % 8) != 0`. Where white is true and `black` is `false`.
-void update_screen(u8 screen_buffer[64 * 4]) {
+void screen_update(u8 screen_buffer[64 * 4]) {
   for(u8 page = 0; page < 8; page++) {
     const u8 COMMAND_FRAME[] = {
       0x00, // Command stream mode
@@ -79,11 +83,11 @@ void update_screen(u8 screen_buffer[64 * 4]) {
       0x00, 0x10, // Go to column 0
     };
 
-    i2c_start_frame(SCREEN_ADDRESS);
+    i2c2_start_frame(SCREEN_ADDRESS);
     for(fast_u8 i = 0; i < ARRAY_LENGTH(COMMAND_FRAME); i++) {
-      i2c_transmit_byte(COMMAND_FRAME[i]);
+      i2c2_transmit_byte(COMMAND_FRAME[i]);
     }
-    i2c_end_frame();
+    i2c2_end_frame();
 
     const u8 DATA_FRAME_HEADER[] = {
       0x40, // Data stream mode
@@ -91,15 +95,15 @@ void update_screen(u8 screen_buffer[64 * 4]) {
       0x00, // the first two data bytes
     };
 
-    i2c_start_frame(SCREEN_ADDRESS);
+    i2c2_start_frame(SCREEN_ADDRESS);
     for(fast_u8 i = 0; i < ARRAY_LENGTH(DATA_FRAME_HEADER); i++) {
-      i2c_transmit_byte(DATA_FRAME_HEADER[i]);
+      i2c2_transmit_byte(DATA_FRAME_HEADER[i]);
     }
 
     for(u8 column = 0; column < 128; column++) {
       u8 page_nibble = (screen_buffer[column / 2 * 4 + (page / 2)] >> (page % 2 * 4)) & 0xf ;
-      i2c_transmit_byte(NIBBLE_UPSCALE_LUT[page_nibble]);
+      i2c2_transmit_byte(NIBBLE_UPSCALE_LUT[page_nibble]);
     }
-    i2c_end_frame();
+    i2c2_end_frame();
   }
 }

@@ -5,7 +5,7 @@
 
 #include<stdbool.h>
 
-void initialize_i2c2() {
+void i2c2_initialize() {
   const u32 SDA_PIN = 14;
   const u32 SCL_PIN = 13;
   
@@ -50,7 +50,7 @@ void initialize_i2c2() {
 ///
 /// NOTE: i2c_transmit_byte must be called atleast once
 /// before `i2c_end_frame`.
-void i2c_start_frame(u8 address) {
+void i2c2_start_frame(u8 address) {
   I2C2->ICR = I2C_ICR_NACKCF;
 
   I2C2->CR2 = 
@@ -60,7 +60,7 @@ void i2c_start_frame(u8 address) {
     I2C_CR2_START;
 }
 
-bool i2c_transmit_byte(u8 byte) {
+bool i2c2_transmit_byte(u8 byte) {
   while(true) {
     u32 isr = I2C2->ISR;
 
@@ -92,7 +92,7 @@ bool i2c_transmit_byte(u8 byte) {
   }
 }
 
-void i2c_end_frame() {
+void i2c2_end_frame() {
   I2C2->CR2 |= I2C_CR2_STOP;
 
   // Weird hardware bug ??????

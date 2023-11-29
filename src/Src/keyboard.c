@@ -1,6 +1,5 @@
 #include "gpio.h"
 #include "keyboard.h"
-#include "prelude.h"
 #include "stm32f070xb.h"
 
 void initialize_keyboard() {

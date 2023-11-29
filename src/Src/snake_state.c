@@ -1,5 +1,4 @@
 #include "snake_state.h"
-#include "prelude.h"
 #include "util.h"
 #include "screen.h"
 #include "psuedorandom.h"

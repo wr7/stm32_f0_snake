@@ -1,5 +1,4 @@
 #include "psuedorandom.h"
-#include "prelude.h"
 
 PRNG prng_with_default_seed() {
   return (PRNG){1483364093};

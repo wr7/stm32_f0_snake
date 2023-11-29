@@ -10,17 +10,9 @@
 
 int main(void)
 {
-  initialize_i2c2();
-
-  for(u32 i = 0; i < 500000; i++) {
-    __ASM volatile ("nop");
-  }
-
-  initialize_screen();
-
   initialize_led_pin();
 
-  if(initialize_screen())
+  if(screen_initialize())
     // Enable LED pin
     GPIOA->BSRR |= 1 << LED_PIN;
 
@@ -38,7 +30,7 @@ int main(void)
       __ASM volatile ("nop");
     }
 
-    update_screen(state.screen);
+    screen_update(state.screen);
   }
 }
 
