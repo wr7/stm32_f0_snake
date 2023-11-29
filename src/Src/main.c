@@ -8,17 +8,6 @@
 #include "snake_state.h"
 #include "stm32f070xb.h"
 
-// size = 156
-// typedef struct {
-//   I2C_TypeDef i2c2;
-//   u32 padding1;
-//   RCC_TypeDef rcc;
-//   u32 padding2[2];
-//   GPIO_TypeDef gpiob;
-// } LogStruct;
-
-// volatile LogStruct LOG;
-
 int main(void)
 {
   initialize_i2c2();
@@ -43,6 +32,11 @@ int main(void)
     Button button = get_button();
     
     snake_state_tick(&state, button);
+
+    // Add delay (to slow down the game)
+    for(u32 i = 0; i < 50000; i++) {
+      __ASM volatile ("nop");
+    }
 
     update_screen(state.screen);
   }
