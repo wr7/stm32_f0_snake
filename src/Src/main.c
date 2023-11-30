@@ -16,7 +16,7 @@ int main(void)
     // Enable LED pin
     GPIOA->BSRR |= 1 << LED_PIN;
 
-  SnakeState state;
+  SnakeState state; // 4380
   snake_state_initialize(&state);
 
   while(true)

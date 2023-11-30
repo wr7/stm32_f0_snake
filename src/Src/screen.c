@@ -5,25 +5,23 @@
 
 #include <stdbool.h>
 
-void screen_set_pixel(u8 screen_buffer[64 * 4], Position position) {
-  u8 page = position.y / 8;
-  u8 bit_offset = position.y % 8;
-
-  screen_buffer[position.x * 4 + page] |= 1 << bit_offset;
+void screen_set_pixel(u32 screen_buffer[64], Position position) {
+  screen_buffer[position.x] |= 1 << position.y;
 }
 
-bool screen_get_pixel(u8 screen_buffer[64 *4], Position position) {
-  u8 page = position.y / 8;
-  u8 bit_offset = position.y % 8;
-
-  return (screen_buffer[position.x * 4 + page] & (1 << bit_offset)) != 0;
+bool screen_get_pixel(u32 screen_buffer[64], Position position) {
+  return (screen_buffer[position.x] & (1 << position.y)) != 0;
 }
 
-void screen_reset_pixel(u8 screen_buffer[64 * 4], Position position) {
-  u8 page = position.y / 8;
-  u8 bit_offset = position.y % 8;
+void screen_reset_pixel(u32 screen_buffer[64], Position position) {
+  screen_buffer[position.x] &= ~(1 << position.y);
+}
 
-  screen_buffer[position.x * 4 + page] &= ~(1 << bit_offset);
+void screen_clear(u32 screen_buffer[64]) {
+  // We cannot use the ARRAY_LENGTH macro here because of pointer decay //
+  for(usize i = 0; i < 64; i++) {
+    screen_buffer[i] = 0;
+  }
 }
 
 bool screen_initialize() {
@@ -74,8 +72,8 @@ const static u8 NIBBLE_UPSCALE_LUT[] = {
 // This function automatically upscales a 64x32 image to match the size of the screen.
 // 
 // The screen buffer should be layed out such that a pixel's value can be read with
-// `screen_buffer[column * 4 + row/8] & (row % 8) != 0`. Where white is true and `black` is `false`.
-void screen_update(u8 screen_buffer[64 * 4]) {
+// `screen_buffer[column] & (1 << row) != 0`. Where white is true and `black` is `false`.
+void screen_update(u32 screen_buffer[64]) {
   for(u8 page = 0; page < 8; page++) {
     const u8 COMMAND_FRAME[] = {
       0x00, // Command stream mode
@@ -101,7 +99,7 @@ void screen_update(u8 screen_buffer[64 * 4]) {
     }
 
     for(u8 column = 0; column < 128; column++) {
-      u8 page_nibble = (screen_buffer[column / 2 * 4 + (page / 2)] >> (page % 2 * 4)) & 0xf ;
+      u8 page_nibble = (screen_buffer[column / 2] >> (page * 4)) & 0xf ;
       i2c2_transmit_byte(NIBBLE_UPSCALE_LUT[page_nibble]);
     }
     i2c2_end_frame();

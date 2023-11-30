@@ -11,6 +11,7 @@ typedef unsigned short u16;
 typedef signed short i16;
 typedef unsigned char u8;
 typedef signed char i8;
+typedef size_t usize;
 
 typedef uint_fast32_t fast_u32;
 typedef int_fast32_t fast_i32;

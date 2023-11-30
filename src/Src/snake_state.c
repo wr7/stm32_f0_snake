@@ -59,10 +59,7 @@ void snake_state_initialize(SnakeState *self) {
   self->snake_position = position_ring_buffer_new(self->snake_position_buffer, ARRAY_LENGTH(self->snake_position_buffer));
   self->snake_direction = DIRECTION_DOWN;
 
-  // Clear screen //
-  for(int i = 0; i < ARRAY_LENGTH(self->screen); i++) {
-    self->screen[i] = 0;
-  }
+  screen_clear(self->screen);
 
   // Create and draw initial snake segments //
   position_ring_buffer_push(&self->snake_position, (Position){5, 5});

@@ -6,7 +6,7 @@
 
 typedef struct {
   PRNG random_number_generator;
-  u8 screen[64 * 4];
+  u32 screen[64];
 
   PositionRingBuffer snake_position;
   Direction snake_direction;
